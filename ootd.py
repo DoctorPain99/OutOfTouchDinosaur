@@ -8,8 +8,16 @@ channel = raw_input("Enter the channel(s) you would like your bot to connect to:
 botnick = raw_input("Enter the nick you would like your bot to connect as: ")
 
 #some basic functions
-def ping():
-   irc.send("PONG :Pong\n")
+def ping(msg):
+   pingServer = ""
+   servchar = False
+   for i in msg:
+      if servchar == True:
+         pingServer += i
+      elif i == ":":
+         servchar = True
+   irc.send("PONG " + pingServer + "\n")
+   print "PONG " + pingServer
 
 def sendmsg(chan, msg):
    irc.send("PRIVMSG " + chan + " :" + msg + "\n")
@@ -80,7 +88,7 @@ while (True):
 
    #reply to pings from the server
    if ircmsg.find("PING :") != -1:
-      ping()
+      ping(ircmsg)
    
    #say hello!
    if ircmsg.lower().find(":hello " + botnick.lower()) != -1:
