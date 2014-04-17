@@ -13,8 +13,6 @@ def ping():
 
 def sendmsg(chan, msg):
    irc.send("PRIVMSG " + chan + " :" + msg + "\n")
-   print msg + " sent to " + chan
-
 
 def changenick(nick):
    botnick = nick
