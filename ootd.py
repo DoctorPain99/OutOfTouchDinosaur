@@ -100,8 +100,26 @@ def getNewNick(msg):
       return returnString
                
 
-def getChannel(msg):
-   return "#" + get("#"," ",msg)
+def getChannel(msg,pm):
+   numColons = 0
+   returnString = ""
+   char = False
+   for i in msg:
+      if char == True:
+         if i == " ":
+            break
+         else:
+            returnString += i
+      elif i == ":":
+         numColons += 1
+         if numColons == 2:
+            break
+      elif i == "#":
+         returnString += "#"
+         char = True
+   if (returnString == "") and (pm == True):
+      returnString = getNick(msg)
+   return returnString 
 
 def getNick(msg):
    return get(":","!",msg)
@@ -128,6 +146,24 @@ def stayConnected():
 wellResponses = [
    "OMEGATYRANT?!?!?!?!?!?!?!?",
    "IS DREAM LAND IN BRAWL-?!?!?!?!?!?!?"
+]
+
+insults = [
+   " has no tech skill because they are Nintendo.",
+   ": eck yourself.",
+   " is fucking bad.",
+   ": are you a furry, furry?",
+   " paused. What an asshole.",
+   "'s tech skill is so bad, they lost sets to famous smashers such as TheLegendaryKRB and Burger King.",
+   ": STOP DREAMING YOU FREAK?!?!?!?!?!?",
+   " goes :|O",
+   ": In the words of Yoda, \"No tech skill you have, because Nintendo you are.\"",
+   ": Thou hast no tech skill in thy soul!",
+   ": MORTAL",
+   ": " + fantasyletter + "die",
+   " is an out of touch dinosaur that doesn't do shit.",
+   ": Because of your lack of bagels, you have been blocked until January 1, 1970.",
+   " has no skill whatsoever because they are Microsoft.",
 ]
 
 #connect the bot
@@ -174,31 +210,58 @@ while disconnect == False:
          break
 
       #@join and @part
-      if (ircmsg.find(":" + fantasyletter + "join") != -1):
+      if (ircmsg.find(":" + fantasyletter + "join ") != -1):
          joinchan(getArg(1,ircmsg))
 
       if (ircmsg.find(":" + fantasyletter + "part") != -1):
          if getArg(1,ircmsg) == "":
-            partchan(getChannel(ircmsg))
+            partchan(getChannel(ircmsg,False))
          else:
             partchan(getArg(1,ircmsg))
 
       #@nick
-      if (ircmsg.find(":" + fantasyletter + "nick") != -1):
+      if (ircmsg.find(":" + fantasyletter + "nick ") != -1):
          changenick(getArg(1,ircmsg))
+
+   #@wake
+   if ircmsg.find(":" + fantasyletter + "wake ") != -1:
+      chan = getArg(2,ircmsg)
+      nick = getArg(1,ircmsg)
+      myNick = getNick(ircmsg)
+      if chan == "":
+         chan = getChannel(ircmsg,True)
+      if nick.lower() != botnick.lower():
+         sendmsg(chan,nick + ": WAKE UP?!?!?!?!?!?!?!?")
+         if (nick.lower() == myNick.lower()) or (nick == ""):
+            sendmsg(chan,myNick + ": Also, stop sleep-talking, you techless Nintendo.")
+      else:
+         sendmsg(chan,myNick + ": I am awake, you techless Nintendo.")
+
+   if ircmsg.find(":" + fantasyletter + "test") != -1:
+      sendmsg(getChannel(ircmsg,True),"I'M IN CLASS?!?!?!?!?!? TAKING A TEST?!?!?!?!?!?!?")
+
+   if ircmsg.find(":" + fantasyletter + "help") != -1:
+      sendmsg(getChannel(ircmsg,True),"Do you seriously think I'm going to HELP you?!?!?!? Go bother my programmer.")
+
+   if ircmsg.find(":" + fantasyletter + "insult") != -1:
+      nick = getArg(1,ircmsg)
+      if nick == botnick:
+         sendmsg(getChannel(ircmsg,True),getNick(ircmsg) + ": What a techless Nintendo. Did you really think I was going to insult myself?")
+      else:
+         sendmsg(getChannel(ircmsg,True),nick + random.choice(insults))
 
    #say hello!
    if ircmsg.lower().find(":hello " + botnick.lower()) != -1:
-      hello(getChannel(ircmsg))
+      hello(getChannel(ircmsg,True))
 
    #OMEGATYRANT?!?!?!?!?!?!?!?
    if ircmsg.lower().find(":well") != -1:
-      sendmsg(getChannel(ircmsg),random.choice(wellResponses))
+      sendmsg(getChannel(ircmsg,True),random.choice(wellResponses))
 
    if ircmsg.lower().find(":stupid bot") != -1:
-      sendmsg(getChannel(ircmsg),getNick(ircmsg) + ": Source?")
+      sendmsg(getChannel(ircmsg,True),getNick(ircmsg) + ": Source?")
 
    if ircmsg.find(":TWO") != -1:
-      sendmsg(getChannel(ircmsg),"IS THAT POSSIBLE?!?!?!?!?!?!?!")
+      sendmsg(getChannel(ircmsg,True),"IS THAT POSSIBLE?!?!?!?!?!?!?!")
 
 # (c) basically everyone, except not Conny
