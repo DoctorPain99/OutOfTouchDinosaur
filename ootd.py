@@ -183,6 +183,11 @@ insults = [
            " kicked the goyball overneath their own gol.",
            " likes Picturesque Matchstickable Messages From The Status Quo.",
            " is the Phantom Menace.",
+           " does not realize how fun modifying my source code can be.",
+           " does not know the changes I have undergone.",
+           " should enter \"%help\" into this channel.",
+           " has not realized that most of the original insults have been removed.",
+           " quit. What a techless Nintendo.",
            ]
 
 sources = [
@@ -327,6 +332,12 @@ while True:
         if nick.lower() == botnick.lower():
             sendmsg(getChannel(ircmsg,True),getNick(ircmsg) + ": What a techless Nintendo. Did you really think I was going to insult myself?")
         else:
+            append = getArg(2,False,ircmsg)
+            i = 3
+            while append:
+                nick = nick + " " + append
+                i += 1
+                append = getArg(i, False, ircmsg)
             sendmsg(getChannel(ircmsg,True),nick + random.choice(insults))
     
 
