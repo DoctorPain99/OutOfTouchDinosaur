@@ -330,13 +330,16 @@ while True:
         else:
             append = getArg(2,False,ircmsg)
             i = 2
+            dontinsultself = True
             while append:
                 if append.lower() == botnick.lower():
                     sendmsg(getChannel(ircmsg,True),getNick(ircmsg) + ": What a really techless Nintendo. Did you really think I was going to insult a group containing myself?")
+                    dontinsultself = False
                 nick = nick + " " + append
                 i += 1
                 append = getArg(i, False, ircmsg)
-            sendmsg(getChannel(ircmsg,True),nick + random.choice(insults))
+            if dontinsultself:
+                sendmsg(getChannel(ircmsg,True),nick + random.choice(insults))
     
 
     if ircmsg.lower().find(chanT + " :" + botnick.lower() + ": source?") != -1:
